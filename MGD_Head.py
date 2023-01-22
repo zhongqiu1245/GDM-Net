@@ -120,7 +120,7 @@ class SpatialAttention(nn.Module):
 
         return x * output
 
-class GDM_Module(nn.Module):
+class MGD_Module(nn.Module):
 
     def __init__(self,
                  inplanes,
@@ -356,7 +356,7 @@ class GDM_Module(nn.Module):
 
         return out
 
-class GDM_Block(nn.Module):
+class MGD_Block(nn.Module):
 
     def __init__(self,
                  inplanes,
@@ -375,11 +375,11 @@ class GDM_Block(nn.Module):
                  flexible=False,
                  att_cfg=None,
                  ):
-        super(GDM_Block, self).__init__()
+        super(MGD_Block, self).__init__()
         self.convs_stage = nn.ModuleList()
         for i in range(num_blocks):
             self.convs_stage.append(
-                GDM_Module(
+                MGD_Module(
                     inplanes if i == 0 else planes,
                     planes,
                     skip_inplanes,
@@ -406,7 +406,7 @@ class GDM_Block(nn.Module):
         return out
 
 @HEADS.register_module()
-class GAMRFHead(BaseDecodeHead):
+class MGDHead(BaseDecodeHead):
 
     def __init__(self,
                  # in_channels=(512, 256, 128, 64),
@@ -422,7 +422,7 @@ class GAMRFHead(BaseDecodeHead):
                  flexible=False,
                  att_cfg=None,
                  **kwargs):
-        super(GAMRFHead, self).__init__(**kwargs)
+        super(MGDHead, self).__init__(**kwargs)
 
         if mid_channels is None:
             mid_channels = self.in_channels[1:]
@@ -436,7 +436,7 @@ class GAMRFHead(BaseDecodeHead):
 
         for i in range(len(skip_channels)):
             self.stages.append(
-                GDM_Block(
+                MGD_Block(
                     inplanes=self.in_channels[i],
                     planes=mid_channels[i],
                     skip_inplanes=skip_channels[i],
