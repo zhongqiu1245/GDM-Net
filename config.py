@@ -20,7 +20,7 @@ model = dict(
         contract_dilation=True,
     ),
     decode_head=dict(
-        type='GDMHead',
+        type='MGDHead',
         # in_channels=(2048, 1024, 512, 256),
         # channels=256,
         # skip_channels=(1024, 512, 256),
